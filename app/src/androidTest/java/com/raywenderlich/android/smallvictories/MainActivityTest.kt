@@ -63,7 +63,7 @@ class MainActivityTest {
         onView(withId(R.id.fab)).perform(click())
 
         onView(allOf(withId(R.id.textVictoryCount),
-                withText((previousCount + 1).toString())))
+                withText((previousCount.plus(1)).toString())))
                 .check(matches(isDisplayed()))
     }
 
