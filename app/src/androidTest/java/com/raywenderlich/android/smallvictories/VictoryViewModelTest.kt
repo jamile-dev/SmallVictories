@@ -49,11 +49,33 @@ class VictoryViewModelTest {
   private val viewStateObserver: Observer<VictoryUiModel> = mock()
   private val mockVictoryRepository: VictoryRepository = mock()
   private val viewModel = VictoryViewModel()
+  private val count = 5
 
   @Before
   fun setUpTaskDetailViewModel() {
     viewModel.viewState.observeForever(viewStateObserver)
     viewModel.repository = mockVictoryRepository
+  }
+
+  @Test
+  fun incrementVictoryCountCallsRepository() {
+    stubVictoryRepositoryGetVictoryCount(count) // Arrange
+    viewModel.incrementVictoryCount() // Act
+    verify(mockVictoryRepository).getVictoryCount() // Assert
+  }
+
+  @Test
+  fun incrementVictoryCountUpdatesCount() {
+    stubVictoryRepositoryGetVictoryCount(count)
+    viewModel.incrementVictoryCount()
+    verify(mockVictoryRepository).setVictoryCount(count + 1)
+  }
+
+  @Test
+  fun incrementVictoryCountReturnsUpdatedCount() {
+    stubVictoryRepositoryGetVictoryCount(count)
+    viewModel.incrementVictoryCount()
+    verify(viewStateObserver).onChanged(VictoryUiModel.CountUpdated(count + 1))
   }
 
   @Test
